@@ -38,4 +38,3 @@
 (defn solution-part-two []
   (sum-of-digits pair-halfway captcha))
 
-(solution-part-two)
