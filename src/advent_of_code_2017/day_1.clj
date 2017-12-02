@@ -6,7 +6,6 @@
 (def captcha
   (string/trim (slurp (io/resource "day-1-input.txt"))))
 
-
 (defn- digit-seq [x]
   (->> x
       (str)
