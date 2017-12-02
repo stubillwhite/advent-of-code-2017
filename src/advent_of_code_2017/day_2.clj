@@ -23,7 +23,7 @@
        (map split-tab)
        (map #(map to-int %))))
 
-(defn- min-max-row-checksum [xs]
+(defn min-max-row-checksum [xs]
   (let [sorted (sort xs)
         max-x  (last sorted)
         min-x  (first sorted)]
@@ -31,11 +31,26 @@
 
 (def- sum (partial apply +))
 
-(defn min-max-checksum-calculator [s]
+(defn checksum-calculator [f-row s]
   (->> (parse-spreadsheet s)
-       (map min-max-row-checksum)
+       (map f-row)
        (sum)))
 
 (defn solution-part-one []
-  (min-max-checksum-calculator spreadsheet)) 
+  (checksum-calculator min-max-row-checksum spreadsheet)) 
 
+;; Part two
+
+(defn- divides-exactly? [x y]
+  (zero? (mod y x)))
+
+(defn- find-even-divisor [[x & xs]]
+  (if-let [result (first (filter (partial divides-exactly? x) xs))]
+    (/ result x)
+    (when (seq xs) (find-even-divisor xs))))
+
+(defn even-divisor-row-checksum [xs]
+  (find-even-divisor (sort xs)))
+
+(defn solution-part-two []
+  (checksum-calculator even-divisor-row-checksum spreadsheet))
