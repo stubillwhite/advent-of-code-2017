@@ -47,7 +47,7 @@
 (defn- find-even-divisor [[x & xs]]
   (if-let [result (first (filter (partial divides-exactly? x) xs))]
     (/ result x)
-    (when (seq xs) (find-even-divisor xs))))
+    (when (seq xs) (recur xs))))
 
 (defn even-divisor-row-checksum [xs]
   (find-even-divisor (sort xs)))
