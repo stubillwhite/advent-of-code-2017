@@ -56,11 +56,6 @@
 (defn- update-accumulator [{:keys [f-next coordinates] :as state}]
   (update-in state [:acc] (fn [acc] (f-next acc coordinates))))
 
-;; (defn- navigate-spiral-iter [{:keys [f-done] :as state}]
-;;   (if (f-done (state :acc))
-;;     state
-;;     (recur (-> state (move) (update-accumulator)))))
-
 (defn- navigate-spiral [acc f-next f-done]
   (letfn [(navigate-spiral-iter [{:keys [f-done] :as state}]
             (if (f-done state)
