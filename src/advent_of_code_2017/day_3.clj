@@ -14,9 +14,14 @@
 ;;
 ;; Side:   [1] [2] [3] [4 5] [6 7] [8 9 10] [11 12 13] [14 51 16 17] [18 19 20 21] [22 23 24 25 26] [27 28 29 30 31] [32 33 34 35 36 37] [38 39 40 41 42 43] [44 45 46 47 48 49 50] ...
 ;; Length:  0   1   1    2     2      3          3           4             4               5                5                 6                   6                     7           ...
-;; Steps:   -  R1  U1   L2    D2     R3         U3          L4            D5              R5               U5                L6                  D6                    R7           ...
+;; Steps:   -  R1  U1   L2    D2     R3         U3          L4            D4              R5               U5                L6                  D6                    R7           ...
 ;;
 ;; So we just need a little statemachine that walks the stream, keeping track of current position, side length, and steps to the end of the side.
+;;
+;; EDIT: Now that I've done all that, I've noticed that the bottom right corner is the sequence 1, 9, 25, 49, ..., which is the squares of odd numbers, so there was probably a
+;;       neat optimisation or smarter way to do this. Oh, well... :)
+
+;; Navigation
 
 (defn- rotate-anticlockwise [{:keys [facing side-length steps-left] :as state}]
   (let [rotations       {:down  :right
@@ -40,30 +45,73 @@
 
 (defn- move-along-side [{:keys [facing] :as state}]
   (-> state
-      (update :curr     inc)
-      (update :location (partial new-location facing))
-      (update :steps-left dec)))
+      (update :coordinates (partial new-location facing))
+      (update :steps-left  dec)))
 
 (defn- move [{:keys [steps-left] :as state}]
   (if (zero? steps-left)
-    (rotate-anticlockwise state)
-    (move-along-side state)))
+    (-> state (rotate-anticlockwise) (move-along-side))
+    (-> state (move-along-side))))
 
-(defn- coordinates-of-value [n {:keys [curr] :as state}]
-  (if (= n curr)
-    (state :location)
-    (recur n (move state))))
+(defn- update-accumulator [{:keys [f-next coordinates] :as state}]
+  (update-in state [:acc] (fn [acc] (f-next acc coordinates))))
+
+;; (defn- navigate-spiral-iter [{:keys [f-done] :as state}]
+;;   (if (f-done (state :acc))
+;;     state
+;;     (recur (-> state (move) (update-accumulator)))))
+
+(defn- navigate-spiral [acc f-next f-done]
+  (letfn [(navigate-spiral-iter [{:keys [f-done] :as state}]
+            (if (f-done state)
+              state
+              (recur (-> state (move) (update-accumulator)))))]
+    (navigate-spiral-iter {:acc         acc
+                           :f-next      f-next
+                           :f-done      f-done
+                           :coordinates [0 0]
+                           :facing      :right
+                           :side-length 1
+                           :steps-left  1})))
+
+(defn- current-value-equals? [n]
+  (fn [{:keys [acc]}] (= n acc)))
+
+(defn- increment-count [acc coordinates]
+  (inc acc))
 
 (defn distance-to-origin [n]
-  (if (= n 1)
-    0
-    (let [[x y] (coordinates-of-value n {:curr        1
-                                         :location    [0 0]
-                                         :facing      :right
-                                         :side-length 1
-                                         :steps-left  1})]
-      (+ (Math/abs x) (Math/abs y)))))
+  (let [end-state (navigate-spiral 1 increment-count (current-value-equals? n))
+        [x y]     (end-state :coordinates)]
+    (+ (Math/abs x) (Math/abs y))))
 
 (defn solution-part-one []
   (distance-to-origin 361527))
+
+;; I can't see any other way to solve part two apart from brute force, unless I'm missing something. Also, refactoring
+;; the first solution so I can reuse naviation in the second part has made a bit of a mess. Not sure how best to
+;; structure this to be reusable between both parts.
+
+(defn greater-than? [n]
+  (fn [{:keys [acc coordinates]}] (> (acc coordinates) n)))
+
+(defn- neighbours [[x y]]
+  (let [deltas [[-1  1] [0  1] [1  1]
+                [-1  0]        [1  0]
+                [-1 -1] [0 -1] [1 -1]]]
+    (map (fn [[dx dy]] [(+ x dx) (+ y dy)]) deltas)))
+
+(defn- sum-neighbours [acc coordinates]
+  (let [curr-value (->> (neighbours coordinates)
+                        (map (fn [x] (or (acc x) 0)))
+                        (apply +))]
+    (assoc acc coordinates curr-value)))
+
+(defn value-greater-than [n]
+  (let [final-state               (navigate-spiral {[0 0] 1} sum-neighbours (greater-than? n))
+        {:keys [acc coordinates]} final-state]
+    (acc coordinates)))
+
+(defn solution-part-two []
+  (value-greater-than 361527))
 
