@@ -21,8 +21,6 @@
 ;; EDIT: Now that I've done all that, I've noticed that the bottom right corner is the sequence 1, 9, 25, 49, ..., which is the squares of odd numbers, so there was probably a
 ;;       neat optimisation or smarter way to do this. Oh, well... :)
 
-;; Navigation
-
 (defn- rotate-anticlockwise [{:keys [facing side-length steps-left] :as state}]
   (let [rotations       {:down  :right
                          :right :up
@@ -84,7 +82,7 @@
   (distance-to-origin 361527))
 
 ;; I can't see any other way to solve part two apart from brute force, unless I'm missing something. Also, refactoring
-;; the first solution so I can reuse naviation in the second part has made a bit of a mess. Not sure how best to
+;; the first solution so I can reuse navigation in the second part has made a bit of a mess. Not sure how best to
 ;; structure this to be reusable between both parts.
 
 (defn greater-than? [n]

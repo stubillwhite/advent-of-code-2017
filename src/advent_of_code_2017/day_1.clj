@@ -8,9 +8,9 @@
 
 (defn- digit-seq [x]
   (->> x
-      (str)
-      (seq)
-      (map #(Integer/parseInt (str %)))))
+       (str)
+       (seq)
+       (map #(Integer/parseInt (str %)))))
 
 (defn pair-adjacent [x]
   (let [digits (digit-seq x)]
