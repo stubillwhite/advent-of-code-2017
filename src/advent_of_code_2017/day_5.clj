@@ -13,13 +13,21 @@
        (split-newline)
        (map (fn [x] (Integer/parseInt x)))))
 
-(defn steps-to-exit [maze]
+(defn steps-to-exit [maze f-mutator]
   (letfn [(jump [steps maze idx]
             (if (or (< idx 0) (>= idx (count maze)))
               steps
               (let [offset (maze idx)]
-                (recur (inc steps) (update maze idx inc) (+ offset idx)))))]
+                (recur (inc steps) (update maze idx f-mutator) (+ offset idx)))))]
     (jump 0 (into [] maze) 0)))
 
 (defn solution-part-one []
-  (steps-to-exit maze))
+  (steps-to-exit maze inc))
+
+;; Part two
+
+(defn inc-if-greater-than-three [x]
+  (if (>= x 3) (dec x) (inc x)))
+
+(defn solution-part-two []
+  (steps-to-exit maze inc-if-greater-than-three))
