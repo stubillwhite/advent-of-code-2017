@@ -15,7 +15,7 @@
        (string/trim)
        (split-newline)))
 
-(defn valid-passphrase? [s]
+(defn no-duplicate-words-passphrase? [s]
   (->> s
        (split-space)
        (group-by identity)
@@ -24,5 +24,20 @@
 
 (defn solution-part-one []
   (->> passphrases
-       (filter valid-passphrase?)
+       (filter no-duplicate-words-passphrase?)
+       (count)))
+
+;; Part two
+
+(defn no-anagrams-passphrase? [s]
+  (->> s
+       (split-space)
+       (map #(-> % (seq) (sort) (str)))
+       (group-by identity)
+       (vals)
+       (every? #(= (count %) 1))))
+
+(defn solution-part-two []
+  (->> passphrases
+       (filter no-anagrams-passphrase?)
        (count)))

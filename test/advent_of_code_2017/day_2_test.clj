@@ -9,7 +9,7 @@
            "2 4 6 8"]]
     (string/replace (string/join "\n" s) " " "\t")))
 
-(deftest checksum-given-part-one-expected-input-then-expected-result
+(deftest checksum-given-part-one-example-input-then-example-result
   (is (= 18 (checksum-calculator min-max-row-checksum part-one-example-input))))
 
 (def part-two-example-input
@@ -18,5 +18,5 @@
            "3 8 6 5"]]
     (string/replace (string/join "\n" s) " " "\t")))
 
-(deftest checksum-given-part-two-expected-input-then-expected-result
+(deftest checksum-given-part-two-example-input-then-example-result
   (is (= 9 (checksum-calculator even-divisor-row-checksum part-two-example-input))))

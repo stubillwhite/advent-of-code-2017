@@ -2,7 +2,7 @@
   (:require [advent-of-code-2017.day-3 :refer :all]
             [clojure.test :refer :all]))
 
-(deftest distance-to-origin-given-expected-input-then-expected-result
+(deftest distance-to-origin-given-example-input-then-example-result
   (is (= 0 (distance-to-origin 1)))
   (is (= 3 (distance-to-origin 12)))
   (is (= 2 (distance-to-origin 23)))
@@ -55,7 +55,7 @@
 ;; 351   11   23   25   26
 ;; 362  747  806--->   ...
 
-(deftest value-greater-than-expected-input-then-expected-result
+(deftest value-greater-than-example-input-then-example-result
   (is (= 2   (value-greater-than  1)))
   (is (= 4   (value-greater-than  3)))
   (is (= 5   (value-greater-than  4)))
