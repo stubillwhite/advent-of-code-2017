@@ -15,12 +15,16 @@
        (string/trim)
        (split-newline)))
 
-(defn no-duplicate-words-passphrase? [s]
-  (->> s
-       (split-space)
+(defn- all-unique? [coll]
+  (->> coll
        (group-by identity)
        (vals)
        (every? #(= (count %) 1))))
+
+(defn no-duplicate-words-passphrase? [s]
+  (->> s
+       (split-space)
+       (all-unique?)))
 
 (defn solution-part-one []
   (->> passphrases
@@ -33,9 +37,7 @@
   (->> s
        (split-space)
        (map #(-> % (seq) (sort) (str)))
-       (group-by identity)
-       (vals)
-       (every? #(= (count %) 1))))
+       (all-unique?)))
 
 (defn solution-part-two []
   (->> passphrases

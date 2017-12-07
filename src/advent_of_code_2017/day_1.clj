@@ -8,7 +8,6 @@
 
 (defn- digit-seq [x]
   (->> x
-       (str)
        (seq)
        (map #(Integer/parseInt (str %)))))
 
@@ -17,8 +16,8 @@
     (->> (interleave digits (drop 1 (cycle digits)))
          (partition 2))))
 
-(defn sum-of-digits [pair-fn x]
-  (->> (pair-fn x)
+(defn sum-of-digits [f-pair x]
+  (->> (f-pair x)
        (filter #(apply = %))
        (map first)
        (apply +)))
