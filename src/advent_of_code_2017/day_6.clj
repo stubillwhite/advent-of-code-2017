@@ -34,14 +34,30 @@
         indices (redistribution-indices banks n idx)]
     (reduce (fn [acc x] (update acc x inc)) (assoc banks idx 0) indices)))
 
-(defn redistribution-cycle-length [banks]
+(defn redistribute-until-cycle-detected [banks]
   (loop [banks  banks
-         states #{banks}]
+         states {banks 0}]
     (let [new-state (redistribute banks)]
       (if (contains? states new-state)
-        (count states)
-        (recur new-state (conj states new-state))))))
+        {:states         states
+         :repeated-state new-state}
+        (recur new-state (assoc states new-state (count states)))))))
+
+(defn redistribution-cycle-length [banks]
+  (let [{:keys [states]} (redistribute-until-cycle-detected)]
+    (count states)))
 
 (defn solution-part-one []
   (redistribution-cycle-length initial-state))
 
+;; Part two
+
+;; I guess we could either just iterate the loop twice, or else keep track of the index of each state in a map of state
+;; to index. I'm going to go for the latter.
+
+(defn cycle-length [banks]
+  (let [{:keys [states repeated-state]} (redistribute-until-cycle-detected banks)]
+    (- (count states) (states repeated-state))))
+
+(defn solution-part-two []
+  (cycle-length initial-state))

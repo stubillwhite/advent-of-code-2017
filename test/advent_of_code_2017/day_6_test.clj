@@ -12,3 +12,6 @@
     (is (= [0 2 3 4] (redistribute-n-times banks 3)))
     (is (= [1 3 4 1] (redistribute-n-times banks 4)))
     (is (= [2 4 1 2] (redistribute-n-times banks 5)))))
+
+(deftest cycle-length-given-example-input-then-example-result
+  (is (= 4 (cycle-length [0 2 7 0]))))
