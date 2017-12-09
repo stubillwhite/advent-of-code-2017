@@ -10,10 +10,10 @@
 
 (deftest topological-sort-given-acyclic-graph-then-sorted-order
   (let [graph {:a #{:b :d}
-               :b #{:c}
+               :b #{:c :d}
                :c #{}
                :d #{:c}}]
-    (is (= [:c :b :d :a] (topological-sort graph)))))
+    (is (= [:c :d :b :a] (topological-sort graph)))))
 
 (deftest topological-sort-given-cyclic-graph-then-throws
   (let [graph {:a #{:b :c}
