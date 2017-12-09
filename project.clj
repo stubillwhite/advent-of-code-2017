@@ -12,7 +12,7 @@
   :plugins []
   
   :dependencies [[org.clojure/tools.nrepl "0.2.13"]
-                 [org.clojure/clojure "1.9.0-alpha11"]
+                 [org.clojure/clojure "1.9.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [org.clojure/tools.trace "0.7.9"]
                  [com.rpl/specter "1.0.2"]
