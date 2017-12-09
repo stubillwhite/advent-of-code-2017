@@ -44,7 +44,7 @@
         (recur new-state (assoc states new-state (count states)))))))
 
 (defn redistribution-cycle-length [banks]
-  (let [{:keys [states]} (redistribute-until-cycle-detected)]
+  (let [{:keys [states]} (redistribute-until-cycle-detected banks)]
     (count states)))
 
 (defn solution-part-one []
