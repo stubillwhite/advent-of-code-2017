@@ -47,3 +47,6 @@
 
 (deftest root-program-given-example-input-then-example-result
   (is (= "tknk" (root-program example-programs))))
+
+(deftest weight-of-rebalanced-node-given-example-input-then-example-result
+  (is (= 60 (weight-of-rebalanced-node example-programs))))
