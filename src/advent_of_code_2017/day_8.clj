@@ -36,10 +36,16 @@
      :cnd     (conditional cnd)
      :cnd-arg (Integer/parseInt cnd-arg)}))
 
+(defn- update-max-value [regs]
+  (let [max-value (apply max (vals regs))]
+    (assoc regs :max-value max-value)))
+
 (defn- execute [instructions]
   (reduce (fn [regs {:keys [op-reg op op-arg cnd-reg cnd cnd-arg]}]
             (if (cnd (or (regs cnd-reg) 0) cnd-arg)
-              (update regs op-reg (fn [x] (op (or (regs op-reg) 0) op-arg)))
+              (-> regs
+                  (update op-reg (fn [x] (op (or (regs op-reg) 0) op-arg)))
+                  (update-max-value))
               regs))
           {}
           instructions))
@@ -53,3 +59,12 @@
   (->> (parse-and-execute-instructions lines)
        (vals)
        (apply max)))
+
+;; Part two
+
+;; Just a small refactor to keep track of the highest value. This needs to be done after the registers have been
+;; updated, in case the largest value is hit on the final operation.
+
+(defn solution-part-two []
+  (-> (parse-and-execute-instructions lines)
+      (:max-value)))
