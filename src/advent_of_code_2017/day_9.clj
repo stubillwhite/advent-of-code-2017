@@ -13,7 +13,7 @@
     (state :escape-next)  (assoc state :escape-next false)
     (= x \!)              (assoc state :escape-next true)
     (= x \>)              (assoc state :in-garbage false)
-    (state :in-garbage)   state
+    (state :in-garbage)   (update state :consumed-garbage inc)
     (= x \<)              (assoc state :in-garbage true)
     (= x \{)              (update state :depth inc)
     (= x \})              (-> state
@@ -22,8 +22,17 @@
     :else                 state))
 
 (defn total-score [s]
-  (let [final-state (reduce consume-character {:depth 0 :score 0} (seq s))]
-    (final-state :score)))
+  (get (reduce consume-character {:depth 0 :score 0 :consumed-garbage 0} (seq s))
+       :score))
 
 (defn solution-part-one []
   (total-score stream))
+
+;; Part two
+
+(defn consumed-garbage [s]
+  (get (reduce consume-character {:depth 0 :score 0 :consumed-garbage 0} (seq s))
+       :consumed-garbage))
+
+(defn solution-part-two []
+  (consumed-garbage stream))

@@ -11,3 +11,12 @@
   (is (= 9  (total-score "{{<ab>},{<ab>},{<ab>},{<ab>}}")))
   (is (= 9  (total-score "{{<!!>},{<!!>},{<!!>},{<!!>}}")))
   (is (= 3  (total-score "{{<a!>},{<a!>},{<a!>},{<ab>}}"))))
+
+(deftest consumed-garbage-given-example-input-then-example-count
+  (is (=  0 (consumed-garbage "<>")))
+  (is (= 17 (consumed-garbage "<random characters>")))
+  (is (=  3 (consumed-garbage "<<<<>")))
+  (is (=  2 (consumed-garbage "<{!>}>")))
+  (is (=  0 (consumed-garbage "<!!>")))
+  (is (=  0 (consumed-garbage "<!!!>")))
+  (is (= 10 (consumed-garbage "<{o\"i!a,<{i<a>"))))

@@ -23,7 +23,7 @@
                       "==" =
                       "!=" not=
                       ">=" >=
-                      ">" >}]
+                      ">"  >}]
     (conditionals s)))
 
 (defn- parse-line [s]
