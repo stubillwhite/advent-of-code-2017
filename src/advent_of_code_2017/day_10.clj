@@ -6,10 +6,13 @@
 (defn split-comma [s]
   (string/split s #","))
 
-(def- lengths
+(def- problem-input
   (->> (io/resource "day-10-input.txt")
        (slurp)
-       (string/trim)
+       (string/trim)))
+
+(def- lengths
+  (->> problem-input
        (split-comma)
        (map #(Integer/parseInt %))))
 
@@ -48,3 +51,31 @@
         [x1 x2 & _]  (result :xs)]
     (* x1 x2)))
 
+;; Part two
+
+(defn to-byte-stream [s]
+  (map int (seq s)))
+
+(defn- append-suffix [xs]
+  (concat xs [17 31 73 47 23]))
+
+(defn- twist-repeated [xs lengths rounds]
+  (let [final-state (twist xs (apply concat (repeat rounds lengths)))]
+    (final-state :xs)))
+
+(defn dense-hash [xs]
+  (map (fn [x] (apply bit-xor x)) (partition 16 xs)))
+
+(defn to-hexadecimal-string [xs]
+  (->> xs
+       (map (fn [x] (format "%02x" x)))
+       (apply str)))
+
+(defn knot-hash [s]
+  (let [lengths (-> s (to-byte-stream) (append-suffix))]
+    (-> (twist-repeated (range 256) lengths 64)
+        (dense-hash)
+        (to-hexadecimal-string))))
+
+(defn solution-part-two []
+  (knot-hash problem-input))
