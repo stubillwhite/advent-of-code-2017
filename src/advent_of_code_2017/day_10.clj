@@ -3,7 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
-(defn split-comma [s]
+(defn- split-comma [s]
   (string/split s #","))
 
 (def- problem-input
@@ -33,11 +33,10 @@
                 (drop n normalised))
         (rotate-from-position start))))
 
-(defn- twist-iter [{:keys [xs skip-size pos] :as acc} length]
-  (-> acc
-      (assoc :xs        (apply-to-sublist reverse xs pos length))
-      (assoc :skip-size (inc skip-size))
-      (assoc :pos       (mod (+ length pos skip-size) (count xs)))))
+(defn- twist-iter [{:keys [xs skip-size pos]} length]
+  {:xs        (apply-to-sublist reverse xs pos length)
+   :skip-size (inc skip-size)
+   :pos       (mod (+ length pos skip-size) (count xs))})
 
 (defn twist [xs lengths]
   (reduce twist-iter
