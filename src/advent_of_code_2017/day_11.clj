@@ -33,7 +33,15 @@
        (slurp)
        (string/trim)))
 
-(defn- move [[x y] dir]
+(defn- distance [[x y]]
+  (cond
+    (or (< x 0)
+        (< y 0)) (distance [(Math/abs x) (Math/abs y)])
+    (zero? x)    (/ y 2)
+    (zero? y)    x
+    :else        (inc (distance [(dec x) (dec y)]))))
+
+(defn- new-position [[x y] dir]
   (let [deltas  {"n"  [ 0  2]
                  "ne" [ 1  1]
                  "se" [ 1 -1]
@@ -45,22 +53,21 @@
 
 (defn- follow-directions [dirs]
   (reduce
-   (fn [acc dir] (move acc dir))
-   [0 0]
+   (fn [path dir]
+     (cons (new-position (first path) dir) path))   
+   [[0 0]]
    (parse-directions dirs)))
 
-(defn distance [[x y]]
-  (cond
-    (or (< x 0)
-        (< y 0)) (distance [(Math/abs x) (Math/abs y)])
-    (zero? x)    (/ y 2)
-    (zero? y)    x
-    :else        (inc (distance [(dec x) (dec y)]))))
-
 (defn steps-from-origin [dirs]
-  (let [[x y] (follow-directions dirs)]
-    (distance [x y])))
+  (let [endpoint (first (follow-directions dirs))]
+    (distance endpoint)))
 
 (defn solution-part-one []
   (steps-from-origin child-path))
 
+;; Part two
+
+;; Refactor to build a list of positions, then just map distance and max across that
+
+(defn solution-part-two []
+  (apply max (map distance (follow-directions child-path))))
