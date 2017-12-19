@@ -35,4 +35,18 @@
 (defn solution-part-one []
   (count (connected-to (construct-graph programs) 0)))
 
+;; Part two
 
+;; Just run over the graph pulling out groups and removing each from the graph until empty
+
+(defn groups [graph]
+  (letfn [(groups-iter [graph groups]
+            (if (empty? graph)
+              groups
+              (let [new-group (connected-to graph (first (keys graph)))]
+                (recur (apply dissoc graph new-group)
+                       (conj groups new-group)))))]
+    (groups-iter graph #{})))
+
+(defn solution-part-two []
+  (count (groups (construct-graph programs))))

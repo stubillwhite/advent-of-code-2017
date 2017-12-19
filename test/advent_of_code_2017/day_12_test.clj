@@ -28,3 +28,6 @@
   (let [graph (construct-graph example-input)]
     (is (= #{1}           (connected-to graph 1)))
     (is (= #{0 2 3 4 5 6} (connected-to graph 0)))))
+
+(deftest groups-given-example-input-then-example-output
+  (is (= #{#{1} #{0 2 3 4 5 6}} (groups example-graph))))
