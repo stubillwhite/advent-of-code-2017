@@ -11,3 +11,6 @@
 
 (deftest total-severity-given-example-input-then-example-result
   (is (= 24 (total-severity example-input))))
+
+(deftest safe-packet-delay-given-example-input-then-example-result
+  (is (= 10 (safe-packet-delay example-input))))
