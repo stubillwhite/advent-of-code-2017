@@ -17,7 +17,8 @@
                  [org.clojure/tools.trace "0.7.9"]
                  [com.rpl/specter "1.0.2"]
                  [mount "0.1.11"]
-                 [com.taoensso/tufte "1.1.1"]]
+                 [com.taoensso/tufte "1.1.1"]
+                 [com.taoensso/tufte "1.1.2"]]
   
   :profiles {:dev {:dependencies [[org.clojure/tools.namespace "0.2.10"]]
                    :source-paths ["dev"]}})
