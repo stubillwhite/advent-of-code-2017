@@ -12,8 +12,20 @@
     (is (= generator-a-expected (take 5 (generator-a generator-a-example-seed))))
     (is (= generator-b-expected (take 5 (generator-b generator-b-example-seed))))))
 
-(deftest judge-n-values-given-example-input-then-example-result
+(deftest judge-n-values-given-example-generators-then-example-result
   (let [gen-a (generator-a generator-a-example-seed)
         gen-b (generator-b generator-b-example-seed)]
     (is (= 1   (judge-n-values gen-a gen-b 3)))
     (is (= 588 (judge-n-values gen-a gen-b (* 40 1000 1000))))))
+
+(deftest picky-generator-given-example-input-then-example-values
+  (let [generator-a-expected [1352636452 1992081072 530830436 1980017072 740335192]
+        generator-b-expected [1233683848 862516352 1159784568 1616057672 412269392]]
+    (is (= generator-a-expected (take 5 (picky-generator-a generator-a-example-seed))))
+    (is (= generator-b-expected (take 5 (picky-generator-b generator-b-example-seed))))))
+
+(deftest judge-n-values-given-example-picky-generators-then-example-result
+  (let [gen-a (picky-generator-a generator-a-example-seed)
+        gen-b (picky-generator-b generator-b-example-seed)]
+    (is (= 1   (judge-n-values gen-a gen-b 1056)))
+    (is (= 309 (judge-n-values gen-a gen-b (* 5 1000 1000))))))

@@ -5,7 +5,7 @@
 
 ;; It feels like there's definitely optimisations to be had here. Let's brute force for now.
 ;;
-;; This isn't fast on my machine; 40 million pairs takes 70 seconds.
+;; This isn't fast on my machine; 40 million pairs takes 70 seconds. May return to this to optimise.
 
 (def- generator-a-factor 16807)
 (def- generator-b-factor 48271)
@@ -34,3 +34,17 @@
                   (generator-b 124)
                   (* 40 1000 1000)))
 
+;; Part two
+
+(defn picky-generator-a [seed]
+  (->> (generator generator-a-factor seed)
+       (filter (fn [x] (zero? (mod x 4))))))
+
+(defn picky-generator-b [seed]
+  (->> (generator generator-b-factor seed)
+       (filter (fn [x] (zero? (mod x 8))))))
+
+(defn solution-part-two []
+  (judge-n-values (picky-generator-a 699)
+                  (picky-generator-b 124)
+                  (* 5 1000 1000)))
