@@ -3,9 +3,10 @@
             [advent-of-code-2017.utils :refer [def-]]
             [clojure.test :refer :all]))
 
-(deftest execute-actions-given-example-actions-then-example-results
-  (is (= "eabcd" (execute-actions "abcde" ["s1"])))
-  (is (= "eabdc" (execute-actions "eabcd" ["x3/4"])))
-  (is (= "baedc" (execute-actions "eabdc" ["pe/b"]))))
+(deftest dance-given-example-actions-then-example-results
+  (is (= "eabcd" (dance "abcde" ["s1"])))
+  (is (= "eabdc" (dance "eabcd" ["x3/4"])))
+  (is (= "baedc" (dance "eabdc" ["pe/b"]))))
 
-
+(deftest iterated-dance-given-example-actions-then-example-results
+  (is (= "abcde" (iterated-dance "abcde" ["s1" "x3/4" "pe/b"] 4))))
