@@ -9,4 +9,5 @@
   (is (= [0 2 3 1] (spinlock 3 3))))
 
 (deftest value-after-spinlock-given-example-input-then-example-result
-  (is (= 638 (value-after-spinlock 3 2017))))
+  (is (= 638 (value-after-spinlock 3 2017 2017))))
+
